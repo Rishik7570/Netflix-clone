@@ -12,23 +12,23 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      if (!window.location.href.endsWith('/login')) {
-        return;
-      }
-
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Logged in");
-        navigate("/");
-        return;
-      }
-      else {
-        console.log("Logged Out");
-        navigate('/login')
-        return;
+        if (window.location.pathname === '/login') {
+          navigate("/");
+        }
+      } else {
+        console.log("Logged out");
+        if (window.location.pathname !== '/login') {
+          navigate('/login');
+        }
       }
     });
-  });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [navigate]);
 
   return (
     <div className="">
