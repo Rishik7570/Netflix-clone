@@ -25,10 +25,8 @@ const App = () => {
         }
       }
     });
-
-    // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="">
